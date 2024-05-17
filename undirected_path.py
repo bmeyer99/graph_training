@@ -1,4 +1,4 @@
-from collections import deque
+import queue
 
 input = "m", "j"
 
@@ -8,13 +8,7 @@ input = "m", "j"
 # Here we create placehoders and add any data we have already
 graph = {}
 nodes = []
-edges = [
-    ["i", "j"],
-    ["k", "i"],
-    ["m", "k"],
-    ["k", "l"],
-    ["o", "n"]
-]
+edges = [["i", "j"], ["k", "i"], ["m", "k"], ["k", "l"], ["o", "n"]]
 # Since we don't know if this is acyclic then we need to prevent loops
 
 
@@ -29,23 +23,27 @@ for edge in edges:
     graph[node1].append(node2)
     graph[node2].append(node1)
 
+
 # Now that we have the graph we can use the 'has_path" algo to find a path
 # We have added the 'visited' portion to keep track if we've been there before
 def has_path_breadth(graph, src, dst):
+    visited = set()
     if src == dst:
         return True
-    queue = deque(src)
-    visited = set()
-    while (len(queue) > 0):
-        current = queue.popleft()
+    myq = queue.Queue()
+    myq.put(src)
+    visited.add(src)
+    while not myq.empty():
+        current = myq.get()
         if current == dst:
             return True
         visited.add(current)
-        
         for neighbor in graph[current]:
-            if neighbor not in visited and neighbor not in queue:
-                queue.appendleft(neighbor)
+            if neighbor not in visited:
+                visited.add(neighbor)
+                myq.put(neighbor)
     return False
+
 
 print("Breadth first search")
 print(has_path_breadth(graph, input[0], input[1]))

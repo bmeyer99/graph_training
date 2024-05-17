@@ -1,29 +1,24 @@
-from collections import deque
+import queue
 
-graph = {
-  'f': ['g', 'i'],
-  'g': ['h'],
-  'h': [],
-  'i': ['g', 'k'],
-  'j': ['i'],
-  'k': []
-}
+graph = {"f": ["g", "i"], "g": ["h"], "h": [], "i": ["g", "k"], "j": ["i"], "k": []}
 
 input = "i", "j"
 
-# Breadthfirst search as a queue
+
+# Breadthfirst search as a myq
 def has_path_breadth(graph, src, dst):
     if src == dst:
         return True
-    queue = deque(src)
-    while (len(queue) > 0):
-        current = queue.pop()
+    myq = queue.Queue()
+    while not myq.empty():
+        current = myq.get()
         if current == dst:
             return True
         for neighbor in graph[current]:
-            queue.appendleft(neighbor)
+            myq.put(neighbor)
             has_path_breadth(graph, neighbor, dst)
     return False
+
 
 print("Breadth first search")
 print(has_path_breadth(graph, input[0], input[1]))
@@ -33,14 +28,16 @@ print(has_path_breadth(graph, input[0], input[1]))
 def has_path_depth(graph, src, dst):
     if src == dst:
         return True
-    queue = deque(src)
-    while (len(queue) > 0):
-        current = queue.pop()
+    myq = queue.Queue
+    while len(myq) > 0:
+        current = myq.get()
         if current == dst:
             return True
         for neighbor in graph[current]:
-            queue.append(neighbor)
+            myq.append(neighbor)
             has_path_depth(graph, neighbor, dst)
     return False
+
+
 print("Depth first search")
 print(has_path_depth(graph, input[0], input[1]))
